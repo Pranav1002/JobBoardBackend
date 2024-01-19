@@ -17,9 +17,9 @@ public class ResumeController {
     @Autowired
     private ResumeService resumeService;
 
-    @PostMapping("/upload")
-    public ResponseEntity<?> uploadResume(@RequestParam("resume") MultipartFile file) throws IOException {
-        String uploadImage = resumeService.uploadResume(file);
+    @PostMapping("/upload/{jsId}")
+    public ResponseEntity<?> uploadResume(@RequestParam("resume") MultipartFile file, @PathVariable Integer jsId) throws IOException {
+        String uploadImage = resumeService.uploadResume(file, jsId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);
     }

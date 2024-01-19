@@ -23,7 +23,7 @@ public class JobSeekerSeviceImpl implements JobSeekerService {
 
     @Override
     public JobSeekerDto getJobSeekerById(Integer jsId) {
-        JobSeeker jobSeeker = jobSeekerRepository.findById(jsId).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", jsId));
+        JobSeeker jobSeeker = jobSeekerRepository.findById(jsId).orElseThrow(() -> new ResourceNotFoundException("JobSeeker", " Id ", jsId));
         return this.modelMapper.map(jobSeeker, JobSeekerDto.class);
     }
 
