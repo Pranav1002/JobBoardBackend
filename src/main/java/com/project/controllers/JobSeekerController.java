@@ -4,10 +4,9 @@ import com.project.payloads.JobSeekerDto;
 import com.project.services.JobSeekerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/jobseeker")
@@ -22,5 +21,16 @@ public class JobSeekerController {
         return ResponseEntity.ok(this.jobSeekerService.getJobSeekerById(jsId));
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<JobSeekerDto>> getAllJobSeekers()
+    {
+        return ResponseEntity.ok(jobSeekerService.getAllJobSeekers());
+    }
+
+    @PostMapping("/addJobseeker")
+    public void addJobSeeker(@RequestBody JobSeekerDto jobSeekerDto)
+    {
+        this.jobSeekerService.addJobSeeker(jobSeekerDto);
+    }
 
 }

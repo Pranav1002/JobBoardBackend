@@ -9,7 +9,6 @@ public interface JobSeekerService {
 
     public JobSeekerDto getJobSeekerById(Integer jsId);
 
-    public List<JobSeekerDto> getJobSeekers();
 
     public JobSeekerDto updateJobSeeker(JobSeekerDto jobSeeker);
 
@@ -17,4 +16,5 @@ public interface JobSeekerService {
 
     public void addJobSeeker(JobSeekerDto jobSeekerDto);
 
+    List<JobSeekerDto> getAllJobSeekers();
 }

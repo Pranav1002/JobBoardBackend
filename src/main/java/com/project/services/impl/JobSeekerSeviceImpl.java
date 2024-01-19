@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JobSeekerSeviceImpl implements JobSeekerService {
@@ -26,10 +27,7 @@ public class JobSeekerSeviceImpl implements JobSeekerService {
         return this.modelMapper.map(jobSeeker, JobSeekerDto.class);
     }
 
-    @Override
-    public List<JobSeekerDto> getJobSeekers() {
-        return null;
-    }
+
 
     @Override
     public JobSeekerDto updateJobSeeker(JobSeekerDto jobSeeker) {
@@ -44,5 +42,15 @@ public class JobSeekerSeviceImpl implements JobSeekerService {
     @Override
     public void addJobSeeker(JobSeekerDto jobSeekerDto) {
 
+        JobSeeker jobSeeker = this.modelMapper.map(jobSeekerDto, JobSeeker.class);
+        JobSeeker savedJobSeeker = this.jobSeekerRepository.save(jobSeeker);
+    }
+
+    @Override
+    public List<JobSeekerDto> getAllJobSeekers() {
+        List<JobSeeker> jobSeekers= this.jobSeekerRepository.findAll();
+        List<JobSeekerDto> jobSeekerDtos = jobSeekers.stream().map(jobSeeker -> this.modelMapper.map(jobSeeker, JobSeekerDto.class)).collect(Collectors.toList());
+
+        return jobSeekerDtos;
     }
 }
