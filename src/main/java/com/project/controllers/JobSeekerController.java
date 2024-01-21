@@ -33,4 +33,12 @@ public class JobSeekerController {
         this.jobSeekerService.addJobSeeker(jobSeekerDto);
     }
 
+    @PutMapping("update/{jsId}")
+    public ResponseEntity<JobSeekerDto> updateJobSeeker(@RequestBody JobSeekerDto jobSeekerDto, @PathVariable Integer jsId)
+    {
+        JobSeekerDto updatedJobSeeker = this.jobSeekerService.updateJobSeeker(jobSeekerDto, jsId);
+
+        return ResponseEntity.ok(updatedJobSeeker);
+    }
+
 }

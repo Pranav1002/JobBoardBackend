@@ -10,7 +10,7 @@ public interface JobSeekerService {
     public JobSeekerDto getJobSeekerById(Integer jsId);
 
 
-    public JobSeekerDto updateJobSeeker(JobSeekerDto jobSeeker);
+    public JobSeekerDto updateJobSeeker(JobSeekerDto jobSeeker, Integer jsId);
 
     public void deleteJobSeeker(Integer jsId);
 

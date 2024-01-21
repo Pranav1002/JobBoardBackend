@@ -30,12 +30,36 @@ public class JobSeekerSeviceImpl implements JobSeekerService {
 
 
     @Override
-    public JobSeekerDto updateJobSeeker(JobSeekerDto jobSeeker) {
-        return null;
+    public JobSeekerDto updateJobSeeker(JobSeekerDto jobSeekerDto, Integer jsId) {
+
+        JobSeeker jobSeeker = jobSeekerRepository.findById(jsId).orElseThrow(() -> new ResourceNotFoundException("JobSeeker", " Id ", jsId));
+
+        jobSeeker.setName(jobSeekerDto.getName());
+        jobSeeker.setJobTitle(jobSeekerDto.getJobTitle());
+        jobSeeker.setCurrentSalary(jobSeekerDto.getCurrentSalary());
+        jobSeeker.setExpectedSalary(jobSeekerDto.getExpectedSalary());
+        jobSeeker.setExperience(jobSeekerDto.getExperience());
+        jobSeeker.setAge(jobSeekerDto.getAge());
+        jobSeeker.setEducationLevel(jobSeekerDto.getEducationLevel());
+        jobSeeker.setLanguages(jobSeekerDto.getLanguages());
+        jobSeeker.setJobCategory(jobSeekerDto.getJobCategory());
+        jobSeeker.setDescription(jobSeekerDto.getDescription());
+        jobSeeker.setCountry(jobSeekerDto.getCountry());
+        jobSeeker.setCity(jobSeekerDto.getCity());
+        jobSeeker.setJobSeekerSocialNetwork(jobSeekerDto.getJobSeekerSocialNetwork());
+
+        JobSeeker updatedJobSeeker = this.jobSeekerRepository.save(jobSeeker);
+
+        return modelMapper.map(updatedJobSeeker, JobSeekerDto.class);
+
     }
 
     @Override
     public void deleteJobSeeker(Integer jsId) {
+
+        JobSeeker jobSeeker = jobSeekerRepository.findById(jsId).orElseThrow(() -> new ResourceNotFoundException("JobSeeker", " Id ", jsId));
+
+        this.jobSeekerRepository.delete(jobSeeker);
 
     }
 
@@ -53,4 +77,7 @@ public class JobSeekerSeviceImpl implements JobSeekerService {
 
         return jobSeekerDtos;
     }
+
+
+
 }

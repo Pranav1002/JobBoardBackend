@@ -20,8 +20,4 @@ public class Resume {
     private String fileType;
     private String filePath;
 
-    @OneToOne
-    @JoinColumn(name = "js_id")
-    private JobSeeker jobSeeker;
-
 }

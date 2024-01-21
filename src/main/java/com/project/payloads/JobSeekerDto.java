@@ -1,6 +1,7 @@
 package com.project.payloads;
 
 
+import com.project.models.JobSeekerSocialNetwork;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +17,28 @@ public class JobSeekerDto {
 
     private String name;
 
-    private String currentLocation;
+    private String jobTitle;
 
-    private String skillset;
+    private String currentSalary;
+
+    private String expectedSalary;
+
+    private Integer experience;
+
+    private Integer age;
+
+    private String educationLevel;
+
+    private String languages;
+
+    private String jobCategory;
+
+    private String description;
+
+    private String country;
+
+    private String city;
+
+    private JobSeekerSocialNetwork jobSeekerSocialNetwork;
 
 }

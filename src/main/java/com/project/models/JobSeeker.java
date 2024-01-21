@@ -1,5 +1,6 @@
 package com.project.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,15 +22,31 @@ public class JobSeeker {
 
     private String name;
 
-    private String currentLocation;
+    private String jobTitle;
 
-    private String skillset;
+    private String currentSalary;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Education> educations;
+    private String expectedSalary;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Experience> experiences;
+    private Integer experience;
+
+    private Integer age;
+
+    private String educationLevel;  // Certificate
+
+    private String languages;
+
+    private String jobCategory;
+
+    private String description;
+
+    @OneToOne(mappedBy = "jobSeeker")
+    @JsonManagedReference
+    private JobSeekerSocialNetwork jobSeekerSocialNetwork;
+
+    private String country;
+
+    private String city;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "resume_id")
