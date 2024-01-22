@@ -41,4 +41,10 @@ public class JobSeekerController {
         return ResponseEntity.ok(updatedJobSeeker);
     }
 
+    @DeleteMapping("/delete/{jsId}")
+    public void deleteJobSeeker(@PathVariable Integer jsId)
+    {
+        this.jobSeekerService.deleteJobSeeker(jsId);
+    }
+
 }

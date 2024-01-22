@@ -40,7 +40,7 @@ public class JobSeeker {
 
     private String description;
 
-    @OneToOne(mappedBy = "jobSeeker")
+    @OneToOne(mappedBy = "jobSeeker", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private JobSeekerSocialNetwork jobSeekerSocialNetwork;
 

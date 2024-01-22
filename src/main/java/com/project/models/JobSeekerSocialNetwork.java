@@ -18,7 +18,7 @@ public class JobSeekerSocialNetwork {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer snId;
 
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToOne
     @JoinColumn(name = "js_id")
     @JsonBackReference
     private JobSeeker jobSeeker;
