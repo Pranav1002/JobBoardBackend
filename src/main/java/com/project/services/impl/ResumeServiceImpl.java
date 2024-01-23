@@ -24,7 +24,7 @@ public class ResumeServiceImpl implements ResumeService {
     @Autowired
     private JobSeekerRepository jobSeekerRepository;
 
-    private final String FOLDER_PATH="C:\\Users\\PRANAV THAKKAR\\OneDrive\\Desktop\\SDP\\JobBoardBackend\\src\\main\\resources\\static\\";
+    private final String FOLDER_PATH="C:\\Users\\PRANAV THAKKAR\\OneDrive\\Desktop\\project files\\";
 
 
     @Override
