@@ -52,5 +52,11 @@ public class JobSeeker {
     @JoinColumn(name = "resume_id")
     private Resume resume;
 
+    @OneToMany(mappedBy = "jobSeeker", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<JSEducation> jsEducations;
 
+    @OneToMany(mappedBy = "jobSeeker", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<JSExperience> jsExperience;
 }
