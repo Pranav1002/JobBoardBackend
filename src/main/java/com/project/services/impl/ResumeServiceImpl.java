@@ -52,11 +52,13 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public byte[] downloadResume(String fileName) throws IOException{
+    public byte[] downloadResume(Integer jsId) throws IOException{
 
-        Optional<Resume> resume = resumeRepository.findByFileName(fileName);
+        JobSeeker jobSeeker = this.jobSeekerRepository.findByJsId(jsId).orElseThrow(()->new ResourceNotFoundException("JobSeeker", " Id ", jsId));
 
-        String filePath = resume.get().getFilePath();
+        Resume resume = jobSeeker.getResume();
+
+        String filePath = resume.getFilePath();
 
         byte[] file = Files.readAllBytes(new File(filePath).toPath());
 

@@ -8,6 +8,6 @@ public interface ResumeService {
 
     public String uploadResume(MultipartFile file, Integer jsId) throws IOException;
 
-    public byte[] downloadResume(String fileName) throws IOException;
+    public byte[] downloadResume(Integer jsId) throws IOException;
 
 }

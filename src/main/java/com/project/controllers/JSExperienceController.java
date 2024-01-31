@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("jobseeker/experience")
+@RequestMapping("api/v1/jobseeker/experience")
 public class JSExperienceController {
 
     @Autowired

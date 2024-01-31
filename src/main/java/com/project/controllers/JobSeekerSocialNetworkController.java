@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("jobseeker/socialnetwork")
+@RequestMapping("api/v1/jobseeker/socialnetwork")
 public class JobSeekerSocialNetworkController {
 
     @Autowired

@@ -11,22 +11,22 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/resume")
+@RequestMapping("api/v1")
 public class ResumeController {
 
     @Autowired
     private ResumeService resumeService;
 
-    @PostMapping("/upload/{jsId}")
+    @PostMapping("/jobseeker/resume/upload/{jsId}")
     public ResponseEntity<?> uploadResume(@RequestParam("resume") MultipartFile file, @PathVariable Integer jsId) throws IOException {
         String uploadResume = resumeService.uploadResume(file, jsId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadResume);
     }
 
-    @GetMapping("/download/{fileName}")
-    public ResponseEntity<?> downloadResume(@PathVariable String fileName) throws IOException {
-        byte[] imageData=resumeService.downloadResume(fileName);
+    @GetMapping("jobseeker/resume/download/{jsId}")
+    public ResponseEntity<?> downloadResume(@PathVariable Integer jsId) throws IOException {
+        byte[] imageData=resumeService.downloadResume(jsId);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("application/pdf"))
                 .body(imageData);
