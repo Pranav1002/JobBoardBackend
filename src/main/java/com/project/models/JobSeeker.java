@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -59,4 +60,11 @@ public class JobSeeker {
     @OneToMany(mappedBy = "jobSeeker", fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<JSExperience> jsExperience;
+
+    @ManyToMany(mappedBy = "jobSeekers")
+    private Set<Job> appliedJobs;
+
+    @ManyToMany(mappedBy = "shortlistedJobSeekers")
+    private Set<Job> shortlistedJobs;
+
 }

@@ -19,9 +19,9 @@ public class ResumeController {
 
     @PostMapping("/upload/{jsId}")
     public ResponseEntity<?> uploadResume(@RequestParam("resume") MultipartFile file, @PathVariable Integer jsId) throws IOException {
-        String uploadImage = resumeService.uploadResume(file, jsId);
+        String uploadResume = resumeService.uploadResume(file, jsId);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(uploadImage);
+                .body(uploadResume);
     }
 
     @GetMapping("/download/{fileName}")

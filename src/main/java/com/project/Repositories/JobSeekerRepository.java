@@ -9,4 +9,6 @@ public interface JobSeekerRepository extends JpaRepository<JobSeeker, Integer> {
 
     Optional<JobSeeker> findByJsId(Integer jsId);
 
+    //I have to write the query here.
+
 }
