@@ -67,4 +67,7 @@ public class JobSeeker {
     @ManyToMany(mappedBy = "shortlistedJobSeekers")
     private Set<Job> shortlistedJobs;
 
+    @OneToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private User user;
+
 }

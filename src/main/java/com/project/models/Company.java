@@ -46,5 +46,7 @@ public class Company {
     @JsonIgnore
     private List<Job> jobs;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private User user;
 
 }

@@ -1,10 +1,13 @@
 package com.project.services.impl;
 
 import com.project.Repositories.JobSeekerRepository;
+import com.project.Repositories.UserRepository;
 import com.project.exceptions.ResourceNotFoundException;
 import com.project.models.JobSeeker;
+import com.project.models.User;
 import com.project.payloads.JobSeekerDto;
 import com.project.services.JobSeekerService;
+import com.project.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,9 @@ public class JobSeekerSeviceImpl implements JobSeekerService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public JobSeekerDto getJobSeekerById(Integer jsId) {
