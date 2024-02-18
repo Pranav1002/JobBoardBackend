@@ -17,9 +17,6 @@ public class CompanyController {
     @Autowired
     private CompanyService companyService;
 
-    @Autowired
-    private JobService jobService;
-
 
     @PostMapping("/add")
     public boolean addCompany(@RequestBody CompanyDto companyDto)
@@ -35,10 +32,10 @@ public class CompanyController {
         return ResponseEntity.ok(companyDto);
     }
 
-    @PutMapping("/update/{companyId}")
-    public boolean updateCompanyById(@RequestBody CompanyDto companyDto, @PathVariable Integer companyId)
+    @PutMapping("/update/{userId}")
+    public boolean updateCompanyById(@RequestBody CompanyDto companyDto, @PathVariable Integer userId)
     {
-        return this.companyService.updateCompany(companyDto, companyId);
+        return this.companyService.updateCompany(companyDto, userId);
     }
 
     @DeleteMapping("/delete/{companyId}")

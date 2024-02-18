@@ -17,6 +17,8 @@ import java.util.List;
 @AllArgsConstructor
 public class CompanyDto {
 
+    private Integer companyId;
+
     private String name;
 
     private String website;

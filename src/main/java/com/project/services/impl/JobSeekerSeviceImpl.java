@@ -27,6 +27,9 @@ public class JobSeekerSeviceImpl implements JobSeekerService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public JobSeekerDto getJobSeekerById(Integer jsId) {
         JobSeeker jobSeeker = jobSeekerRepository.findById(jsId).orElseThrow(() -> new ResourceNotFoundException("JobSeeker", " Id ", jsId));
@@ -36,9 +39,11 @@ public class JobSeekerSeviceImpl implements JobSeekerService {
 
 
     @Override
-    public JobSeekerDto updateJobSeeker(JobSeekerDto jobSeekerDto, Integer jsId) {
+    public JobSeekerDto updateJobSeeker(JobSeekerDto jobSeekerDto, Integer userId) {
 
-        JobSeeker jobSeeker = jobSeekerRepository.findById(jsId).orElseThrow(() -> new ResourceNotFoundException("JobSeeker", " Id ", jsId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
+
+        JobSeeker jobSeeker = this.jobSeekerRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
 
         jobSeeker.setName(jobSeekerDto.getName());
         jobSeeker.setJobTitle(jobSeekerDto.getJobTitle());
@@ -84,6 +89,17 @@ public class JobSeekerSeviceImpl implements JobSeekerService {
         return jobSeekerDtos;
     }
 
+    @Override
+    public JobSeekerDto getJobSeekerByUserId(Integer userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
+
+        JobSeeker jobSeeker = jobSeekerRepository.findByUser(user).orElseThrow(()-> new ResourceNotFoundException("User", "Id", userId));
+
+        JobSeekerDto jobSeekerDto = this.modelMapper.map(jobSeeker, JobSeekerDto.class);
+
+        return jobSeekerDto;
+
+    }
 
 
 }

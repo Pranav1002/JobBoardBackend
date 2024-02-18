@@ -33,10 +33,10 @@ public class JobSeekerController {
         this.jobSeekerService.addJobSeeker(jobSeekerDto);
     }
 
-    @PutMapping("update/{jsId}")
-    public ResponseEntity<JobSeekerDto> updateJobSeeker(@RequestBody JobSeekerDto jobSeekerDto, @PathVariable Integer jsId)
+    @PutMapping("update/{userId}")
+    public ResponseEntity<JobSeekerDto> updateJobSeeker(@RequestBody JobSeekerDto jobSeekerDto, @PathVariable Integer userId)
     {
-        JobSeekerDto updatedJobSeeker = this.jobSeekerService.updateJobSeeker(jobSeekerDto, jsId);
+        JobSeekerDto updatedJobSeeker = this.jobSeekerService.updateJobSeeker(jobSeekerDto, userId);
 
         return ResponseEntity.ok(updatedJobSeeker);
     }
@@ -45,6 +45,14 @@ public class JobSeekerController {
     public void deleteJobSeeker(@PathVariable Integer jsId)
     {
         this.jobSeekerService.deleteJobSeeker(jsId);
+    }
+
+    @GetMapping("get/{userId}")
+    public ResponseEntity<JobSeekerDto> getJobSeekerByUser(@PathVariable Integer userId)
+    {
+        JobSeekerDto jobSeekerDto = this.jobSeekerService.getJobSeekerByUserId(userId);
+
+        return ResponseEntity.ok(jobSeekerDto);
     }
 
 }

@@ -1,8 +1,10 @@
 package com.project.services.impl;
 
 import com.project.Repositories.CompanyRepository;
+import com.project.Repositories.UserRepository;
 import com.project.exceptions.ResourceNotFoundException;
 import com.project.models.Company;
+import com.project.models.User;
 import com.project.payloads.CompanyDto;
 import com.project.services.CompanyService;
 import org.modelmapper.ModelMapper;
@@ -14,6 +16,9 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
     private CompanyRepository companyRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -35,9 +40,11 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public boolean updateCompany(CompanyDto companyDto, Integer companyId) {
+    public boolean updateCompany(CompanyDto companyDto, Integer userId) {
 
-        Company company = this.companyRepository.findById(companyId).orElseThrow(() -> new ResourceNotFoundException("Company", " Id ", companyId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
+
+        Company company = this.companyRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
 
         company.setName(companyDto.getName());
         company.setWebsite(companyDto.getWebsite());
@@ -61,5 +68,14 @@ public class CompanyServiceImpl implements CompanyService {
         this.companyRepository.delete(company);
 
         return true;
+    }
+
+    @Override
+    public CompanyDto getCompanyByUserId(Integer userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
+
+        Company company = this.companyRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
+
+        return this.modelMapper.map(company, CompanyDto.class);
     }
 }

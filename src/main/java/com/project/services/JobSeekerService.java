@@ -10,11 +10,13 @@ public interface JobSeekerService {
     public JobSeekerDto getJobSeekerById(Integer jsId);
 
 
-    public JobSeekerDto updateJobSeeker(JobSeekerDto jobSeeker, Integer jsId);
+    public JobSeekerDto updateJobSeeker(JobSeekerDto jobSeeker, Integer userId);
 
     public void deleteJobSeeker(Integer jsId);
 
     public void addJobSeeker(JobSeekerDto jobSeekerDto);
 
-    List<JobSeekerDto> getAllJobSeekers();
+    public List<JobSeekerDto> getAllJobSeekers();
+
+    public JobSeekerDto getJobSeekerByUserId(Integer userId);
 }
