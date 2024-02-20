@@ -8,7 +8,7 @@ public interface CompanyService {
 
     public CompanyDto getCompanyById(Integer companyId);
 
-    public boolean updateCompany(CompanyDto companyDto, Integer userId);
+    public CompanyDto updateCompany(CompanyDto companyDto, Integer userId);
 
     public boolean deleteCompany(Integer companyId);
 

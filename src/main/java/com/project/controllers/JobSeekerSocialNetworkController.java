@@ -3,6 +3,7 @@ package com.project.controllers;
 import com.project.models.JobSeekerSocialNetwork;
 import com.project.services.JobSeekerSocialNetworkService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,9 +20,10 @@ public class JobSeekerSocialNetworkController {
     }
 
     @GetMapping("/get/{jsId}")
-    public JobSeekerSocialNetwork getSocialNetwork(@PathVariable Integer jsId)
+    public ResponseEntity<JobSeekerSocialNetwork> getSocialNetwork(@PathVariable Integer jsId)
     {
-        return jobSeekerSocialNetworkService.getSocialNetworkById(jsId);
+        JobSeekerSocialNetwork jobSeekerSocialNetwork =  jobSeekerSocialNetworkService.getSocialNetworkById(jsId);
+        return ResponseEntity.ok(jobSeekerSocialNetwork);
     }
 
     @PutMapping("/update/{jsId}")

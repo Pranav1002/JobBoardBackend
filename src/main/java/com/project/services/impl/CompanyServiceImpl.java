@@ -40,7 +40,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public boolean updateCompany(CompanyDto companyDto, Integer userId) {
+    public CompanyDto updateCompany(CompanyDto companyDto, Integer userId) {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
 
@@ -57,7 +57,7 @@ public class CompanyServiceImpl implements CompanyService {
 
         this.companyRepository.save(company);
 
-        return true;
+        return this.modelMapper.map(company,CompanyDto.class);
     }
 
     @Override

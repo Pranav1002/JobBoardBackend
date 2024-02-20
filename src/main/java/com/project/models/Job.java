@@ -26,9 +26,13 @@ public class Job {
 
     private String jobDescription;
 
+    private String jobType;
+
     private Integer experience;
 
     private String salary;
+
+    private String gender;
 
     private String industry;
 

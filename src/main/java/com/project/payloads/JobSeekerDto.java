@@ -1,6 +1,7 @@
 package com.project.payloads;
 
 
+import com.project.models.JobSeekerImage;
 import com.project.models.JobSeekerSocialNetwork;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,6 +39,8 @@ public class JobSeekerDto {
     private String country;
 
     private String city;
+
+    private JobSeekerImage image;
 
     private JobSeekerSocialNetwork jobSeekerSocialNetwork;
 

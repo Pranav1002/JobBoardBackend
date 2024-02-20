@@ -3,6 +3,7 @@ package com.project.payloads;
 
 import com.project.models.Company;
 import com.project.models.CompanyImage;
+import com.project.models.CompanySocialNetwork;
 import com.project.models.Job;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,5 +41,7 @@ public class CompanyDto {
     private String description;
 
     private CompanyImage image;
+
+    private CompanySocialNetwork companySocialNetwork;
 
 }

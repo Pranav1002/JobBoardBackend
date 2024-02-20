@@ -46,6 +46,10 @@ public class Company {
     @OneToOne(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     private CompanyImage image;
 
+    @OneToOne(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private CompanySocialNetwork companySocialNetwork;
+
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL,fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonManagedReference
     @JsonIgnore

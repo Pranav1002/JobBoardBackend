@@ -33,9 +33,10 @@ public class CompanyController {
     }
 
     @PutMapping("/update/{userId}")
-    public boolean updateCompanyById(@RequestBody CompanyDto companyDto, @PathVariable Integer userId)
+    public ResponseEntity<CompanyDto> updateCompanyById(@RequestBody CompanyDto companyDto, @PathVariable Integer userId)
     {
-        return this.companyService.updateCompany(companyDto, userId);
+        CompanyDto companyDto1 = this.companyService.updateCompany(companyDto, userId);
+        return ResponseEntity.ok(companyDto1);
     }
 
     @DeleteMapping("/delete/{companyId}")
