@@ -1,6 +1,7 @@
 package com.project.controllers;
 
 import com.project.services.CompanyImageService;
+import com.project.services.JobSeekerImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,28 +16,26 @@ import java.io.IOException;
 public class CompanyImageController {
 
     @Autowired
-    private CompanyImageService companyImageService;
+    private JobSeekerImageService jobSeekerImageService;
 
-    @PostMapping("/upload/{companyId}")
-    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile file, @PathVariable Integer companyId) throws IOException {
-        String uploadImage = companyImageService.uploadImage(file, companyId);
+    @PostMapping("/upload/{jobSeekerId}")
+    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile file, @PathVariable Integer jobSeekerId) throws IOException {
+        String uploadImage = jobSeekerImageService.uploadImage(file, jobSeekerId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);
     }
 
     @GetMapping("/download/{fileName}")
-    public ResponseEntity<?> downloadImage(@PathVariable String fileName) throws IOException {
-        byte[] imageData=companyImageService.downloadImage(fileName);
-        return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.valueOf("image/jpeg/png"))
+    public ResponseEntity<byte[]> downloadImage(@PathVariable String fileName) throws IOException {
+        byte[] imageData = jobSeekerImageService.downloadImage(fileName);
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
                 .body(imageData);
-
     }
 
-    @PutMapping("/update/{companyId}")
-    public ResponseEntity<?> changeImage(@RequestParam("image") MultipartFile file, @PathVariable Integer companyId) throws IOException
-    {
-        String changedImage= companyImageService.changeImage(file, companyId);
+    @PutMapping("/update/{jobSeekerId}")
+    public ResponseEntity<?> changeImage(@RequestParam("image") MultipartFile file, @PathVariable Integer jobSeekerId) throws IOException {
+        String changedImage = jobSeekerImageService.changeImage(file, jobSeekerId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(changedImage);
     }

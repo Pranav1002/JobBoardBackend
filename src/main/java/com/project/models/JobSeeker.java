@@ -41,6 +41,9 @@ public class JobSeeker {
 
     private String description;
 
+    @OneToOne(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    private JobSeekerImage image;
+
     @OneToOne(mappedBy = "jobSeeker", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private JobSeekerSocialNetwork jobSeekerSocialNetwork;
