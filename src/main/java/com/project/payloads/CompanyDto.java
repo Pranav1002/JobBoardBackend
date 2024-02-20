@@ -19,6 +19,10 @@ public class CompanyDto {
 
     private Integer companyId;
 
+    private String email;
+
+    private String phoneNumber;
+
     private String name;
 
     private String website;
