@@ -1,5 +1,6 @@
 package com.project.controllers;
 
+import com.project.payloads.CompanyAddressDto;
 import com.project.payloads.CompanyDto;
 import com.project.payloads.JobDto;
 import com.project.services.CompanyService;
@@ -43,6 +44,12 @@ public class CompanyController {
     public boolean deleteCompanyById(@PathVariable Integer companyId)
     {
         return this.companyService.deleteCompany(companyId);
+    }
+
+    @PutMapping("update/address/{companyId}")
+    public boolean updateCompanyAddress(@PathVariable Integer companyId, @RequestBody CompanyAddressDto companyAddressDto)
+    {
+        return companyService.updateCompanyAddress(companyId ,companyAddressDto);
     }
 
 }

@@ -5,6 +5,7 @@ import com.project.Repositories.UserRepository;
 import com.project.exceptions.ResourceNotFoundException;
 import com.project.models.Company;
 import com.project.models.User;
+import com.project.payloads.CompanyAddressDto;
 import com.project.payloads.CompanyDto;
 import com.project.services.CompanyService;
 import org.modelmapper.ModelMapper;
@@ -77,5 +78,17 @@ public class CompanyServiceImpl implements CompanyService {
         Company company = this.companyRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
 
         return this.modelMapper.map(company, CompanyDto.class);
+    }
+
+    @Override
+    public boolean updateCompanyAddress(Integer companyId, CompanyAddressDto companyAddressDto) {
+        Company company = this.companyRepository.findById(companyId).orElseThrow(() -> new ResourceNotFoundException("Company", " Id ", companyId));
+        company.setCountry(companyAddressDto.getCountry());
+        company.setCity(companyAddressDto.getCity());
+        company.setAddress(companyAddressDto.getAddress());
+
+        this.companyRepository.save(company);
+
+        return true;
     }
 }

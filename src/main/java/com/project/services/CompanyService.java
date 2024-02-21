@@ -1,5 +1,6 @@
 package com.project.services;
 
+import com.project.payloads.CompanyAddressDto;
 import com.project.payloads.CompanyDto;
 
 public interface CompanyService {
@@ -13,5 +14,7 @@ public interface CompanyService {
     public boolean deleteCompany(Integer companyId);
 
     public CompanyDto getCompanyByUserId(Integer userId);
+
+    public boolean updateCompanyAddress(Integer companyId, CompanyAddressDto companyAddressDto);
 
 }
