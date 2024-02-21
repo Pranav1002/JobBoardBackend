@@ -16,26 +16,26 @@ import java.io.IOException;
 public class CompanyImageController {
 
     @Autowired
-    private JobSeekerImageService jobSeekerImageService;
+    private CompanyImageService companyImageService;
 
-    @PostMapping("/upload/{jobSeekerId}")
-    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile file, @PathVariable Integer jobSeekerId) throws IOException {
-        String uploadImage = jobSeekerImageService.uploadImage(file, jobSeekerId);
+    @PostMapping("/upload/{companyId}")
+    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile file, @PathVariable Integer companyId) throws IOException {
+        String uploadImage = companyImageService.uploadImage(file, companyId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);
     }
 
     @GetMapping("/download/{fileName}")
     public ResponseEntity<byte[]> downloadImage(@PathVariable String fileName) throws IOException {
-        byte[] imageData = jobSeekerImageService.downloadImage(fileName);
+        byte[] imageData = companyImageService.downloadImage(fileName);
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(imageData);
     }
 
-    @PutMapping("/update/{jobSeekerId}")
-    public ResponseEntity<?> changeImage(@RequestParam("image") MultipartFile file, @PathVariable Integer jobSeekerId) throws IOException {
-        String changedImage = jobSeekerImageService.changeImage(file, jobSeekerId);
+    @PutMapping("/update/{companyId}")
+    public ResponseEntity<?> changeImage(@RequestParam("image") MultipartFile file, @PathVariable Integer companyId) throws IOException {
+        String changedImage = companyImageService.changeImage(file, companyId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(changedImage);
     }
