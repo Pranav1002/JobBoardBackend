@@ -34,6 +34,4 @@ public class CompanyDto {
 
     private String description;
 
-    private CompanyImage image;
-
 }
