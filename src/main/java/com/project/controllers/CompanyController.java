@@ -52,4 +52,11 @@ public class CompanyController {
         return companyService.updateCompanyAddress(companyId ,companyAddressDto);
     }
 
+    @GetMapping("get/address/{companyId}")
+    public ResponseEntity<CompanyAddressDto> getCompanyAddress(@PathVariable Integer companyId)
+    {
+        CompanyAddressDto companyAddressDto = this.companyService.getCompanyAddress(companyId);
+        return ResponseEntity.ok(companyAddressDto);
+    }
+
 }

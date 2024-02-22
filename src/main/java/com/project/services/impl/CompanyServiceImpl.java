@@ -90,4 +90,10 @@ public class CompanyServiceImpl implements CompanyService {
 
         return true;
     }
+
+    @Override
+    public CompanyAddressDto getCompanyAddress(Integer companyId) {
+        Company company = this.companyRepository.findById(companyId).orElseThrow(() -> new ResourceNotFoundException("Company", " Id ", companyId));
+        return this.modelMapper.map(company, CompanyAddressDto.class);
+    }
 }

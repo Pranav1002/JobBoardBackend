@@ -17,4 +17,6 @@ public interface CompanyService {
 
     public boolean updateCompanyAddress(Integer companyId, CompanyAddressDto companyAddressDto);
 
+    public CompanyAddressDto getCompanyAddress(Integer companyId);
+
 }
