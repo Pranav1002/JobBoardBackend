@@ -18,9 +18,9 @@ public class CompanyImageController {
     @Autowired
     private CompanyImageService companyImageService;
 
-    @PostMapping("/upload/{companyId}")
-    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile file, @PathVariable Integer companyId) throws IOException {
-        String uploadImage = companyImageService.uploadImage(file, companyId);
+    @PostMapping("/upload/{userId}")
+    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile file, @PathVariable Integer userId) throws IOException {
+        String uploadImage = companyImageService.uploadImage(file, userId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);
     }
@@ -33,9 +33,9 @@ public class CompanyImageController {
                 .body(imageData);
     }
 
-    @PutMapping("/update/{companyId}")
-    public ResponseEntity<?> changeImage(@RequestParam("image") MultipartFile file, @PathVariable Integer companyId) throws IOException {
-        String changedImage = companyImageService.changeImage(file, companyId);
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<?> changeImage(@RequestParam("image") MultipartFile file, @PathVariable Integer userId) throws IOException {
+        String changedImage = companyImageService.changeImage(file, userId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(changedImage);
     }

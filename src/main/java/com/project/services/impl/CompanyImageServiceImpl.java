@@ -2,11 +2,9 @@ package com.project.services.impl;
 
 import com.project.Repositories.CompanyImageRepository;
 import com.project.Repositories.CompanyRepository;
+import com.project.Repositories.UserRepository;
 import com.project.exceptions.ResourceNotFoundException;
-import com.project.models.Company;
-import com.project.models.CompanyImage;
-import com.project.models.JobSeeker;
-import com.project.models.Resume;
+import com.project.models.*;
 import com.project.services.CompanyImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,10 +22,13 @@ public class CompanyImageServiceImpl implements CompanyImageService {
     @Autowired
     private CompanyRepository companyRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     private final String FOLDER_PATH="C:\\Users\\PRANAV THAKKAR\\OneDrive\\Desktop\\project files\\company images\\";
 
     @Override
-    public String uploadImage(MultipartFile file, Integer companyId) throws IOException {
+    public String uploadImage(MultipartFile file, Integer userId) throws IOException {
         String filePath =FOLDER_PATH+file.getOriginalFilename();
 
         CompanyImage image = companyImageRepository.save(CompanyImage.builder()
@@ -37,7 +38,10 @@ public class CompanyImageServiceImpl implements CompanyImageService {
 
         file.transferTo(new File(filePath));
 
-        Company company = this.companyRepository.findById(companyId).orElseThrow(()->new ResourceNotFoundException("Company", " Id ", companyId));
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
+
+        Company company = this.companyRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
 
         company.setImage(image);
 
@@ -50,10 +54,12 @@ public class CompanyImageServiceImpl implements CompanyImageService {
     }
 
     @Override
-    public String changeImage(MultipartFile file, Integer companyId) throws IOException {
+    public String changeImage(MultipartFile file, Integer userId) throws IOException {
         // Check if the company exists
-        Company company = companyRepository.findById(companyId)
-                .orElseThrow(() -> new ResourceNotFoundException("Company", "Id", companyId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
+
+        Company company = this.companyRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
+
 
         CompanyImage oldImage = company.getImage();
 
