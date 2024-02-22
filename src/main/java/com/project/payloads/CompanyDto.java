@@ -32,16 +32,8 @@ public class CompanyDto {
 
     private String teamSize;
 
-    private String city;
-
-    private String country;
-
-    private String address;
-
     private String description;
 
     private CompanyImage image;
-
-    private CompanySocialNetwork companySocialNetwork;
 
 }

@@ -51,9 +51,6 @@ public class CompanyServiceImpl implements CompanyService {
         company.setWebsite(companyDto.getWebsite());
         company.setEstablish(companyDto.getEstablish());
         company.setTeamSize(companyDto.getTeamSize());
-        company.setCity(companyDto.getCity());
-        company.setCountry(companyDto.getCountry());
-        company.setAddress(companyDto.getAddress());
         company.setDescription(companyDto.getDescription());
 
         this.companyRepository.save(company);
