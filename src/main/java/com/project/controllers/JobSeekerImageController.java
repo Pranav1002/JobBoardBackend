@@ -17,9 +17,9 @@ public class JobSeekerImageController {
     @Autowired
     private JobSeekerImageService jobSeekerImageService;
 
-    @PostMapping("/upload/{jobSeekerId}")
-    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile file, @PathVariable Integer jobSeekerId) throws IOException {
-        String uploadImage = jobSeekerImageService.uploadImage(file, jobSeekerId);
+    @PostMapping("/upload/{userId}")
+    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile file, @PathVariable Integer userId) throws IOException {
+        String uploadImage = jobSeekerImageService.uploadImage(file, userId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);
     }
@@ -32,9 +32,9 @@ public class JobSeekerImageController {
                 .body(imageData);
     }
 
-    @PutMapping("/update/{jsId}")
-    public ResponseEntity<?> changeImage(@RequestParam("image") MultipartFile file, @PathVariable Integer jsId) throws IOException {
-        String changedImage = jobSeekerImageService.changeImage(file, jsId);
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<?> changeImage(@RequestParam("image") MultipartFile file, @PathVariable Integer userId) throws IOException {
+        String changedImage = jobSeekerImageService.changeImage(file, userId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(changedImage);
     }

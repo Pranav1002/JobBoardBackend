@@ -1,92 +1,123 @@
 package com.project.services.impl;
 
-import com.project.Repositories.JobSeekerImageRepository;
 import com.project.Repositories.JobSeekerRepository;
+import com.project.Repositories.UserRepository;
 import com.project.exceptions.ResourceNotFoundException;
 import com.project.models.JobSeeker;
-import com.project.models.JobSeekerImage;
-import com.project.services.JobSeekerImageService;
+import com.project.models.User;
+import com.project.payloads.JobSeekerAddressDto;
+import com.project.payloads.JobSeekerDto;
+import com.project.services.JobSeekerService;
+import com.project.services.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class JobSeekerServiceImpl implements JobSeekerImageService {
-    @Autowired
-    private JobSeekerImageRepository jobSeekerImageRepository;
+public class JobSeekerServiceImpl implements JobSeekerService {
 
     @Autowired
     private JobSeekerRepository jobSeekerRepository;
 
-    private final String FOLDER_PATH="C:\\Users\\PRANAV THAKKAR\\OneDrive\\Desktop\\project files\\jobSeeker images\\";
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
-    public String uploadImage(MultipartFile file, Integer jsId) throws IOException {
-        String filePath =FOLDER_PATH+file.getOriginalFilename();
-
-        JobSeekerImage image = jobSeekerImageRepository.save(JobSeekerImage.builder()
-                .fileName(file.getOriginalFilename())
-                .fileType(file.getContentType())
-                .filePath(filePath).build());
-
-        file.transferTo(new File(filePath));
-
-        JobSeeker jobSeeker = this.jobSeekerRepository.findById(jsId).orElseThrow(()->new ResourceNotFoundException("JobSeeker", " Id ", jsId));
-
-        jobSeeker.setImage(image);
-
-        jobSeekerRepository.save(jobSeeker);
-
-        if (image != null) {
-            return "file uploaded successfully : " + filePath;
-        }
-        return null;
-    }
-
-    @Override
-    public String changeImage(MultipartFile file, Integer jsId) throws IOException {
-        // Check if the jobSeeker exists
-        JobSeeker jobSeeker = jobSeekerRepository.findById(jsId)
-                .orElseThrow(() -> new ResourceNotFoundException("Company", "Id", jsId));
-
-        JobSeekerImage oldImage = jobSeeker.getImage();
-
-        // Delete the current image if it exists
-        JobSeekerImage currentImage = jobSeeker.getImage();
-        if (currentImage != null) {
-            String currentImagePath = currentImage.getFilePath();
-            File currentImageFile = new File(currentImagePath);
-            if (currentImageFile.exists()) {
-                currentImageFile.delete();
-            }
-            // Remove the reference to the old image in the company entity
-            jobSeeker.setImage(null);
-        }
-
-        this.jobSeekerImageRepository.delete(oldImage);
-
-        // Save the new image
-        String newFilePath = FOLDER_PATH + file.getOriginalFilename();
-        JobSeekerImage newImage = jobSeekerImageRepository.save(JobSeekerImage.builder()
-                .fileName(file.getOriginalFilename())
-                .fileType(file.getContentType())
-                .filePath(newFilePath).build());
-
-        file.transferTo(new File(newFilePath));
-
-        // Update the jobSeeker with the new image
-        jobSeeker.setImage(newImage);
-        jobSeekerRepository.save(jobSeeker);
-
-        return "Image changed successfully: " + newFilePath;
+    public JobSeekerDto getJobSeekerById(Integer jsId) {
+        JobSeeker jobSeeker = jobSeekerRepository.findById(jsId).orElseThrow(() -> new ResourceNotFoundException("JobSeeker", " Id ", jsId));
+        return this.modelMapper.map(jobSeeker, JobSeekerDto.class);
     }
 
 
+
     @Override
-    public byte[] downloadImage(String fileName) throws IOException {
-        return new byte[0];
+    public JobSeekerDto updateJobSeeker(JobSeekerDto jobSeekerDto, Integer userId) {
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
+
+        JobSeeker jobSeeker = this.jobSeekerRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
+
+        jobSeeker.setName(jobSeekerDto.getName());
+        jobSeeker.setJobTitle(jobSeekerDto.getJobTitle());
+        jobSeeker.setCurrentSalary(jobSeekerDto.getCurrentSalary());
+        jobSeeker.setExpectedSalary(jobSeekerDto.getExpectedSalary());
+        jobSeeker.setExperience(jobSeekerDto.getExperience());
+        jobSeeker.setAge(jobSeekerDto.getAge());
+        jobSeeker.setEducationLevel(jobSeekerDto.getEducationLevel());
+        jobSeeker.setLanguages(jobSeekerDto.getLanguages());
+        jobSeeker.setJobCategory(jobSeekerDto.getJobCategory());
+        jobSeeker.setDescription(jobSeekerDto.getDescription());
+        jobSeeker.setCountry(jobSeekerDto.getCountry());
+        jobSeeker.setCity(jobSeekerDto.getCity());
+        jobSeeker.setJobSeekerSocialNetwork(jobSeekerDto.getJobSeekerSocialNetwork());
+
+        JobSeeker updatedJobSeeker = this.jobSeekerRepository.save(jobSeeker);
+
+        return modelMapper.map(updatedJobSeeker, JobSeekerDto.class);
+
     }
+
+    @Override
+    public void deleteJobSeeker(Integer jsId) {
+
+        JobSeeker jobSeeker = jobSeekerRepository.findById(jsId).orElseThrow(() -> new ResourceNotFoundException("JobSeeker", " Id ", jsId));
+
+        this.jobSeekerRepository.delete(jobSeeker);
+
+    }
+
+    @Override
+    public void addJobSeeker(JobSeekerDto jobSeekerDto) {
+
+        JobSeeker jobSeeker = this.modelMapper.map(jobSeekerDto, JobSeeker.class);
+        JobSeeker savedJobSeeker = this.jobSeekerRepository.save(jobSeeker);
+    }
+
+    @Override
+    public List<JobSeekerDto> getAllJobSeekers() {
+        List<JobSeeker> jobSeekers= this.jobSeekerRepository.findAll();
+        List<JobSeekerDto> jobSeekerDtos = jobSeekers.stream().map(jobSeeker -> this.modelMapper.map(jobSeeker, JobSeekerDto.class)).collect(Collectors.toList());
+
+        return jobSeekerDtos;
+    }
+
+    @Override
+    public JobSeekerDto getJobSeekerByUserId(Integer userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
+
+        JobSeeker jobSeeker = jobSeekerRepository.findByUser(user).orElseThrow(()-> new ResourceNotFoundException("User", "Id", userId));
+
+        JobSeekerDto jobSeekerDto = this.modelMapper.map(jobSeeker, JobSeekerDto.class);
+
+        return jobSeekerDto;
+
+    }
+
+    @Override
+    public boolean updateJobSeekerAddress(Integer jsId, JobSeekerAddressDto jobSeekerAddressDto) {
+        JobSeeker jobSeeker = jobSeekerRepository.findById(jsId).orElseThrow(() -> new ResourceNotFoundException("JobSeeker", " Id ", jsId));
+        jobSeeker.setCity(jobSeekerAddressDto.getCity());
+        jobSeeker.setCountry(jobSeekerAddressDto.getCountry());
+
+        this.jobSeekerRepository.save(jobSeeker);
+        return true;
+
+    }
+
+    @Override
+    public JobSeekerAddressDto getJobSeekerAddress(Integer jsId) {
+        JobSeeker jobSeeker = jobSeekerRepository.findById(jsId).orElseThrow(() -> new ResourceNotFoundException("JobSeeker", " Id ", jsId));
+        return this.modelMapper.map(jobSeeker, JobSeekerAddressDto.class);
+    }
+
+
 }

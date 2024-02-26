@@ -1,5 +1,6 @@
 package com.project.controllers;
 
+import com.project.payloads.JobSeekerAddressDto;
 import com.project.payloads.JobSeekerDto;
 import com.project.services.JobSeekerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,19 @@ public class JobSeekerController {
         JobSeekerDto jobSeekerDto = this.jobSeekerService.getJobSeekerByUserId(userId);
 
         return ResponseEntity.ok(jobSeekerDto);
+    }
+
+    @PutMapping("update/address/{jsId}")
+    public boolean updateJobSeekerAdress(@RequestBody JobSeekerAddressDto jobSeekerAddressDto, @PathVariable Integer jsId)
+    {
+        return this.jobSeekerService.updateJobSeekerAddress(jsId, jobSeekerAddressDto);
+    }
+
+    @GetMapping("get/address/{jsId}")
+    public ResponseEntity<JobSeekerAddressDto> getJobSeekerAddress(@PathVariable Integer jsId)
+    {
+        JobSeekerAddressDto jobSeekerAddressDto = this.jobSeekerService.getJobSeekerAddress(jsId);
+        return ResponseEntity.ok(jobSeekerAddressDto);
     }
 
 }

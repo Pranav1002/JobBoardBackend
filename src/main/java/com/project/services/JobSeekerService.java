@@ -1,6 +1,8 @@
 package com.project.services;
 
 import com.project.models.JobSeeker;
+import com.project.payloads.CompanyAddressDto;
+import com.project.payloads.JobSeekerAddressDto;
 import com.project.payloads.JobSeekerDto;
 
 import java.util.List;
@@ -19,4 +21,8 @@ public interface JobSeekerService {
     public List<JobSeekerDto> getAllJobSeekers();
 
     public JobSeekerDto getJobSeekerByUserId(Integer userId);
+
+    public boolean updateJobSeekerAddress(Integer jsId, JobSeekerAddressDto jobSeekerAddressDto);
+
+    public JobSeekerAddressDto getJobSeekerAddress(Integer jsId);
 }
