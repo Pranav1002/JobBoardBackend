@@ -25,8 +25,8 @@ public class ResumeGeneratorController {
 		return new ResponseEntity<String>(pdfGen.createDocument(resume), HttpStatus.OK);
 	}
 
-	@GetMapping(path = "/resumef")
-	public ResponseEntity<byte[]> getResume(@RequestParam("filename") String filename) throws IOException {
+	@GetMapping(path = "/resumef/{filename}")
+	public ResponseEntity<byte[]> getResume(@PathVariable String filename) throws IOException {
 
 		return new ResponseEntity<byte[]>(pdfGen.getDocument(filename), HttpStatus.OK);
 	}

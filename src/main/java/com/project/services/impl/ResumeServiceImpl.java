@@ -1,5 +1,6 @@
 package com.project.services.impl;
 
+import com.cloudinary.Cloudinary;
 import com.project.Repositories.JobSeekerRepository;
 import com.project.Repositories.ResumeRepository;
 import com.project.exceptions.ResourceNotFoundException;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -24,19 +26,20 @@ public class ResumeServiceImpl implements ResumeService {
     @Autowired
     private JobSeekerRepository jobSeekerRepository;
 
+    @Autowired
+    private Cloudinary cloudinary;
+
     private final String FOLDER_PATH="C:\\Users\\PRANAV THAKKAR\\OneDrive\\Desktop\\project files\\";
 
 
     @Override
-    public String uploadResume(MultipartFile file, Integer jsId) throws IOException {
-        String filePath =FOLDER_PATH+file.getOriginalFilename();
+    public Map uploadResume(MultipartFile file, Integer jsId) throws IOException {
 
         Resume resume = resumeRepository.save(Resume.builder()
                 .fileName(file.getOriginalFilename())
                 .fileType(file.getContentType())
-                .filePath(filePath).build());
+                .filePath("").build());
 
-        file.transferTo(new File(filePath));
 
         JobSeeker jobSeeker = this.jobSeekerRepository.findByJsId(jsId).orElseThrow(()->new ResourceNotFoundException("JobSeeker", " Id ", jsId));
 
@@ -44,12 +47,18 @@ public class ResumeServiceImpl implements ResumeService {
 
         jobSeekerRepository.save(jobSeeker);
 
-        if (resume != null) {
-            return "file uploaded successfully : " + filePath;
+        try {
+            Map data = this.cloudinary.uploader().upload(file.getBytes(), Map.of());
+
+            return data;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        return null;
 
     }
+
+
+
 
     @Override
     public byte[] downloadResume(Integer jsId) throws IOException{

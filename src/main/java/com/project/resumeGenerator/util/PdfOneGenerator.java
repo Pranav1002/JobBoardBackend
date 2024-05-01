@@ -1,5 +1,7 @@
 package com.project.resumeGenerator.util;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.project.resumeGenerator.model.*;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -7,11 +9,15 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.project.resumeGenerator.model.Header;
 import com.project.resumeGenerator.model.Resume1;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -25,11 +31,15 @@ public class PdfOneGenerator {
 	private static final Font contactStyle = new Font(Font.FontFamily.HELVETICA, 11f, Font.ITALIC);
 	private static final Font contentStyle = new Font(Font.FontFamily.HELVETICA, 10f);
 
+	@Autowired
+	private Cloudinary cloudinary;
+
 	public String createDocument(@Valid Resume1 resume) throws IOException {
 		Document document = new Document();
 		try {
-			String file_location = "C:\\Users\\PRANAV THAKKAR\\OneDrive\\Desktop\\project files\\" + resume.getHeader().getName() + ".pdf";
-			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(new File(file_location)));
+			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+			String filename = resume.getHeader().getName() + ".pdf"; // Construct filename
+			PdfWriter writer = PdfWriter.getInstance(document, byteArrayOutputStream);
 
 			document.open();
 			if (resume != null) {
@@ -43,7 +53,6 @@ public class PdfOneGenerator {
 				}
 				if (resume.getEducation() != null) {
 					addEducation(document, resume.getEducation());
-
 				}
 				if (resume.getExperience() != null) {
 					addExperience(document, resume.getExperience());
@@ -52,41 +61,64 @@ public class PdfOneGenerator {
 					addSkills(document, resume.getSkills());
 				}
 				if (resume.getProjects() != null) {
-
 					addProjects(document, resume.getProjects());
 				}
 			}
 			document.close();
 			writer.close();
 
-			return "Success";
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+			// Upload the generated resume to Cloudinary
+			Map uploadResult = uploadToCloudinary(byteArrayOutputStream.toByteArray(), filename);
 
-		return "Failed";
+			// Optionally, you can return the Cloudinary URL of the uploaded file
+			String cloudinaryUrl = (String) uploadResult.get("secure_url");
+			return cloudinaryUrl != null ? cloudinaryUrl : "Upload failed";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Failed";
+		}
 	}
+
+	private Map uploadToCloudinary(byte[] resumeBytes, String filename) {
+		try {
+			Map uploadResult = this.cloudinary.uploader().upload(resumeBytes, ObjectUtils.asMap(
+					"resource_type", "auto", // Automatically detect the resource type
+					"public_id", filename, // Public ID is the filename without extension
+					"folder", "resumes" // Optional: folder in Cloudinary where the file will be stored
+			));
+			return uploadResult;
+		} catch (IOException e) {
+			throw new RuntimeException("Failed to upload to Cloudinary", e);
+		}
+	}
+
 
 	public byte[] getDocument(String file_name) {
-		String file_location = "src/main/file/" + file_name + ".pdf";
-		File file = new File(file_location);
-		byte[] bytesArray = new byte[(int) file.length()];
-		FileInputStream fis;
 		try {
-			fis = new FileInputStream(file);
-			fis.read(bytesArray);
-			fis.close();
-			return bytesArray;
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			String cloudinaryUrl = "resumes/" + file_name; // Assuming resumes are stored in the 'resumes' folder in Cloudinary
+			URL url = new URL(cloudinaryUrl);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("GET");
 
-		return null;
+			// Set Cloudinary credentials if needed
+			connection.setRequestProperty("Authorization", "Basic " + Base64.getEncoder().encodeToString("api_key:api_secret".getBytes()));
+
+			InputStream inputStream = connection.getInputStream();
+			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+			int nRead;
+			byte[] data = new byte[1024];
+			while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
+				buffer.write(data, 0, nRead);
+			}
+			buffer.flush();
+
+			return buffer.toByteArray();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
+
 
 	public static void addMetaData(Document document, String author) {
 		document.addTitle("My Resume PDF");

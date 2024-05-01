@@ -1,5 +1,6 @@
 package com.project.services.impl;
 
+import com.cloudinary.Cloudinary;
 import com.project.Repositories.JobSeekerImageRepository;
 import com.project.Repositories.JobSeekerRepository;
 import com.project.Repositories.UserRepository;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 @Service
 public class JobSeekerImageServiceImpl implements JobSeekerImageService {
@@ -26,18 +28,20 @@ public class JobSeekerImageServiceImpl implements JobSeekerImageService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private Cloudinary cloudinary;
+
     private final String FOLDER_PATH="C:\\Users\\PRANAV THAKKAR\\OneDrive\\Desktop\\project files\\jobSeeker images\\";
 
     @Override
-    public String uploadImage(MultipartFile file, Integer userId) throws IOException {
-        String filePath =FOLDER_PATH+file.getOriginalFilename();
+    public Map uploadImage(MultipartFile file, Integer userId) throws IOException {
+
 
         JobSeekerImage image = jobSeekerImageRepository.save(JobSeekerImage.builder()
                 .fileName(file.getOriginalFilename())
                 .fileType(file.getContentType())
-                .filePath(filePath).build());
+                .filePath("").build());
 
-        file.transferTo(new File(filePath));
 
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
 
@@ -47,10 +51,13 @@ public class JobSeekerImageServiceImpl implements JobSeekerImageService {
 
         jobSeekerRepository.save(jobSeeker);
 
-        if (image != null) {
-            return "file uploaded successfully : " + filePath;
+        try {
+            Map data = this.cloudinary.uploader().upload(file.getBytes(), Map.of());
+
+            return data;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     @Override

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/company/image")
@@ -19,11 +20,13 @@ public class CompanyImageController {
     private CompanyImageService companyImageService;
 
     @PostMapping("/upload/{userId}")
-    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile file, @PathVariable Integer userId) throws IOException {
-        String uploadImage = companyImageService.uploadImage(file, userId);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(uploadImage);
+    public ResponseEntity<Map> uploadImage(@RequestParam("image") MultipartFile file, @PathVariable Integer userId) throws IOException {
+        Map data=this.companyImageService.uploadImage(file, userId);
+        return new ResponseEntity<>(data, HttpStatus.OK);
     }
+
+
+
 
     @GetMapping("/download/{fileName}")
     public ResponseEntity<byte[]> downloadImage(@PathVariable String fileName) throws IOException {

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1")
@@ -18,10 +19,9 @@ public class ResumeController {
     private ResumeService resumeService;
 
     @PostMapping("/jobseeker/resume/upload/{jsId}")
-    public ResponseEntity<?> uploadResume(@RequestParam("resume") MultipartFile file, @PathVariable Integer jsId) throws IOException {
-        String uploadResume = resumeService.uploadResume(file, jsId);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(uploadResume);
+    public ResponseEntity<Map> uploadResume(@RequestParam("resume") MultipartFile file, @PathVariable Integer jsId) throws IOException {
+        Map data=this.resumeService.uploadResume(file, jsId);
+        return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
     @GetMapping("jobseeker/resume/download/{jsId}")
