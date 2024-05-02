@@ -1,5 +1,6 @@
 package com.project.controllers;
 
+import com.project.payloads.CompanyDto;
 import com.project.payloads.JobSeekerAddressDto;
 import com.project.payloads.JobSeekerDto;
 import com.project.services.JobSeekerService;
@@ -67,6 +68,18 @@ public class JobSeekerController {
     {
         JobSeekerAddressDto jobSeekerAddressDto = this.jobSeekerService.getJobSeekerAddress(jsId);
         return ResponseEntity.ok(jobSeekerAddressDto);
+    }
+
+    @GetMapping("get/companies")
+    public ResponseEntity<List<CompanyDto>> getCompanies(){
+        List<CompanyDto> companyDtos = jobSeekerService.getAllCompanies();
+        return ResponseEntity.ok(companyDtos);
+    }
+
+    @GetMapping("get/company/{companyId}")
+    public ResponseEntity<CompanyDto> getCompanyById(@PathVariable Integer companyId)
+    {
+        return ResponseEntity.ok(jobSeekerService.getCompanyById(companyId));
     }
 
 }

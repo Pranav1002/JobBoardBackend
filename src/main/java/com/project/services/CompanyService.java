@@ -2,6 +2,10 @@ package com.project.services;
 
 import com.project.payloads.CompanyAddressDto;
 import com.project.payloads.CompanyDto;
+import com.project.payloads.JobDto;
+import com.project.payloads.JobSeekerDto;
+
+import java.util.List;
 
 public interface CompanyService {
 
@@ -18,5 +22,11 @@ public interface CompanyService {
     public boolean updateCompanyAddress(Integer companyId, CompanyAddressDto companyAddressDto);
 
     public CompanyAddressDto getCompanyAddress(Integer companyId);
+
+    public List<JobSeekerDto> getApplicants(Integer companyId);
+
+    public List<JobSeekerDto> getAllJobSeekers();
+
+    public JobSeekerDto getJobSeekerById(Integer jsId);
 
 }

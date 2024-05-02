@@ -3,6 +3,7 @@ package com.project.controllers;
 import com.project.payloads.CompanyAddressDto;
 import com.project.payloads.CompanyDto;
 import com.project.payloads.JobDto;
+import com.project.payloads.JobSeekerDto;
 import com.project.services.CompanyService;
 import com.project.services.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,23 @@ public class CompanyController {
     {
         CompanyAddressDto companyAddressDto = this.companyService.getCompanyAddress(companyId);
         return ResponseEntity.ok(companyAddressDto);
+    }
+
+    @GetMapping("get/jobseekers")
+    public ResponseEntity<List<JobSeekerDto>> getAllJobSeekers()
+    {
+        return ResponseEntity.ok(companyService.getAllJobSeekers());
+    }
+
+    @GetMapping("get/applicants/{companyId}")
+    public ResponseEntity<List<JobSeekerDto>> getApplicants(@PathVariable Integer companyId)
+    {
+        return ResponseEntity.ok(companyService.getApplicants(companyId));
+    }
+
+    @GetMapping("get/jobseeker/{jsId}")
+    public ResponseEntity<JobSeekerDto> getJobSeekerById(@PathVariable Integer jsId){
+        return ResponseEntity.ok(companyService.getJobSeekerById(jsId));
     }
 
 }

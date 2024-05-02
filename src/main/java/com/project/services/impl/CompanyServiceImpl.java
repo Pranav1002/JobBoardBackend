@@ -1,16 +1,26 @@
 package com.project.services.impl;
 
 import com.project.Repositories.CompanyRepository;
+import com.project.Repositories.JobRepository;
+import com.project.Repositories.JobSeekerRepository;
 import com.project.Repositories.UserRepository;
 import com.project.exceptions.ResourceNotFoundException;
 import com.project.models.Company;
+import com.project.models.Job;
+import com.project.models.JobSeeker;
 import com.project.models.User;
 import com.project.payloads.CompanyAddressDto;
 import com.project.payloads.CompanyDto;
+import com.project.payloads.JobDto;
+import com.project.payloads.JobSeekerDto;
 import com.project.services.CompanyService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
@@ -20,6 +30,12 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private JobRepository jobRepository;
+
+    @Autowired
+    private JobSeekerRepository jobSeekerRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -95,5 +111,40 @@ public class CompanyServiceImpl implements CompanyService {
     public CompanyAddressDto getCompanyAddress(Integer companyId) {
         Company company = this.companyRepository.findById(companyId).orElseThrow(() -> new ResourceNotFoundException("Company", " Id ", companyId));
         return this.modelMapper.map(company, CompanyAddressDto.class);
+    }
+
+    @Override
+    public List<JobSeekerDto> getApplicants(Integer companyId) {
+        Company company = this.companyRepository.findById(companyId).orElseThrow(() -> new ResourceNotFoundException("Company", " Id ", companyId));
+
+        List<Job> jobs = jobRepository.findByCompany(company).orElseThrow(()-> new RuntimeException());
+
+        List<JobSeekerDto> applicants= new ArrayList<>();
+
+        for(Job job : jobs){
+            Set<JobSeeker> jobSeekers = job.getJobSeekers();
+
+            applicants.addAll(jobSeekers.stream().map(jobSeeker -> modelMapper.map(jobSeeker, JobSeekerDto.class)).toList());
+        }
+
+        return applicants;
+
+    }
+
+    @Override
+    public List<JobSeekerDto> getAllJobSeekers() {
+
+        List<JobSeeker> jobSeekers = jobSeekerRepository.findAll();
+
+        List<JobSeekerDto> jobSeekerDtos = jobSeekers.stream().map(jobSeeker->modelMapper.map(jobSeeker, JobSeekerDto.class)).toList();
+
+        return jobSeekerDtos;
+
+    }
+
+    @Override
+    public JobSeekerDto getJobSeekerById(Integer jsId) {
+        JobSeeker jobSeeker = jobSeekerRepository.findById(jsId).orElseThrow(() -> new ResourceNotFoundException("JobSeeker", " Id ", jsId));
+        return modelMapper.map(jobSeeker, JobSeekerDto.class);
     }
 }

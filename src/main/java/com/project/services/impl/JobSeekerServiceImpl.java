@@ -1,10 +1,13 @@
 package com.project.services.impl;
 
+import com.project.Repositories.CompanyRepository;
 import com.project.Repositories.JobSeekerRepository;
 import com.project.Repositories.UserRepository;
 import com.project.exceptions.ResourceNotFoundException;
+import com.project.models.Company;
 import com.project.models.JobSeeker;
 import com.project.models.User;
+import com.project.payloads.CompanyDto;
 import com.project.payloads.JobSeekerAddressDto;
 import com.project.payloads.JobSeekerDto;
 import com.project.services.JobSeekerService;
@@ -30,6 +33,9 @@ public class JobSeekerServiceImpl implements JobSeekerService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CompanyRepository companyRepository;
 
     @Override
     public JobSeekerDto getJobSeekerById(Integer jsId) {
@@ -117,6 +123,22 @@ public class JobSeekerServiceImpl implements JobSeekerService {
     public JobSeekerAddressDto getJobSeekerAddress(Integer jsId) {
         JobSeeker jobSeeker = jobSeekerRepository.findById(jsId).orElseThrow(() -> new ResourceNotFoundException("JobSeeker", " Id ", jsId));
         return this.modelMapper.map(jobSeeker, JobSeekerAddressDto.class);
+    }
+
+    @Override
+    public List<CompanyDto> getAllCompanies() {
+        List<Company> companies = companyRepository.findAll();
+        List<CompanyDto> companyDtos = companies.stream().map(company -> modelMapper.map(company, CompanyDto.class)).toList();
+
+        return companyDtos;
+    }
+
+    @Override
+    public CompanyDto getCompanyById(Integer companyId) {
+        Company company = this.companyRepository.findById(companyId).orElseThrow(() -> new ResourceNotFoundException("Company", " Id ", companyId));
+
+        return modelMapper.map(company, CompanyDto.class);
+
     }
 
 

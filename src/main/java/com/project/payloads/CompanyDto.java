@@ -34,6 +34,8 @@ public class CompanyDto {
 
     private String description;
 
+    private String address;
+
     private CompanyImage companyImage;
 
     private CompanySocialNetwork companySocialNetwork;
