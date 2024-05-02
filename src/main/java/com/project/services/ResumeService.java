@@ -9,6 +9,6 @@ public interface ResumeService {
 
     public Map uploadResume(MultipartFile file, Integer jsId) throws IOException;
 
-    public byte[] downloadResume(Integer jsId) throws IOException;
+    public String downloadResume(Integer jsId) throws IOException;
 
 }

@@ -17,6 +17,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -84,10 +86,29 @@ public class AuthenticationService {
 
             String token = tokenService.generateJwt(auth);
 
-            return new LoginResponseDTO(userRepository.findByUsername(username).get(),token);
+            User user = userRepository.findByUsername(username).orElseThrow(()->new RuntimeException());
+
+            Integer jsId=null;
+            Integer companyId=null;
+
+            for(GrantedAuthority authority : user.getAuthorities())
+            {
+                if(authority.getAuthority().equals("JOB_SEEKER")){
+                    JobSeeker jobSeeker = jobSeekerRepository.findByUser(user).orElseThrow(()->new RuntimeException());
+                    jsId=jobSeeker.getJsId();
+                }
+                else if(authority.getAuthority().equals("COMPANY")){
+                    Company company = companyRepository.findByUser(user).orElseThrow(()->new RuntimeException());
+                    companyId=company.getCompanyId();
+                }
+            }
+
+
+
+            return new LoginResponseDTO(userRepository.findByUsername(username).get(), jsId, companyId,token);
         }
         catch (AuthenticationException e){
-            return new LoginResponseDTO(null,"");
+            return new LoginResponseDTO(null,null, null, "");
         }
     }
 

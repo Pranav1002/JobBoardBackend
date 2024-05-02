@@ -29,26 +29,29 @@ public class ResumeServiceImpl implements ResumeService {
     @Autowired
     private Cloudinary cloudinary;
 
-    private final String FOLDER_PATH="C:\\Users\\PRANAV THAKKAR\\OneDrive\\Desktop\\project files\\";
 
 
     @Override
     public Map uploadResume(MultipartFile file, Integer jsId) throws IOException {
 
-        Resume resume = resumeRepository.save(Resume.builder()
-                .fileName(file.getOriginalFilename())
-                .fileType(file.getContentType())
-                .filePath("").build());
 
-
-        JobSeeker jobSeeker = this.jobSeekerRepository.findByJsId(jsId).orElseThrow(()->new ResourceNotFoundException("JobSeeker", " Id ", jsId));
-
-        jobSeeker.setResume(resume);
-
-        jobSeekerRepository.save(jobSeeker);
 
         try {
             Map data = this.cloudinary.uploader().upload(file.getBytes(), Map.of());
+
+            String cloudinaryUrl = (String) data.get("secure_url");
+
+            Resume resume = resumeRepository.save(Resume.builder()
+                    .fileName(file.getOriginalFilename())
+                    .fileType(file.getContentType())
+                    .filePath(cloudinaryUrl).build());
+
+
+            JobSeeker jobSeeker = this.jobSeekerRepository.findByJsId(jsId).orElseThrow(()->new ResourceNotFoundException("JobSeeker", " Id ", jsId));
+
+            jobSeeker.setResume(resume);
+
+            jobSeekerRepository.save(jobSeeker);
 
             return data;
         } catch (IOException e) {
@@ -61,7 +64,7 @@ public class ResumeServiceImpl implements ResumeService {
 
 
     @Override
-    public byte[] downloadResume(Integer jsId) throws IOException{
+    public String downloadResume(Integer jsId) throws IOException{
 
         JobSeeker jobSeeker = this.jobSeekerRepository.findByJsId(jsId).orElseThrow(()->new ResourceNotFoundException("JobSeeker", " Id ", jsId));
 
@@ -69,9 +72,7 @@ public class ResumeServiceImpl implements ResumeService {
 
         String filePath = resume.getFilePath();
 
-        byte[] file = Files.readAllBytes(new File(filePath).toPath());
-
-        return file;
+        return filePath;
 
     }
 }

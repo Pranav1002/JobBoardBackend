@@ -13,8 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Base64;
 import java.util.Map;
 
 @Service
@@ -31,28 +37,32 @@ public class JobSeekerImageServiceImpl implements JobSeekerImageService {
     @Autowired
     private Cloudinary cloudinary;
 
-    private final String FOLDER_PATH="C:\\Users\\PRANAV THAKKAR\\OneDrive\\Desktop\\project files\\jobSeeker images\\";
+    private final String FOLDER_PATH="";
 
     @Override
     public Map uploadImage(MultipartFile file, Integer userId) throws IOException {
 
-
-        JobSeekerImage image = jobSeekerImageRepository.save(JobSeekerImage.builder()
-                .fileName(file.getOriginalFilename())
-                .fileType(file.getContentType())
-                .filePath("").build());
-
-
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
-
-        JobSeeker jobSeeker = this.jobSeekerRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
-
-        jobSeeker.setImage(image);
-
-        jobSeekerRepository.save(jobSeeker);
-
         try {
             Map data = this.cloudinary.uploader().upload(file.getBytes(), Map.of());
+
+            String cloudinaryUrl = (String) data.get("secure_url");
+
+            System.out.println((cloudinaryUrl));
+
+            JobSeekerImage image = jobSeekerImageRepository.save(JobSeekerImage.builder()
+                    .fileName(file.getOriginalFilename())
+                    .fileType(file.getContentType())
+                    .filePath(cloudinaryUrl).build());
+
+
+            User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
+
+            JobSeeker jobSeeker = this.jobSeekerRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
+
+            jobSeeker.setImage(image);
+
+            jobSeekerRepository.save(jobSeeker);
+
 
             return data;
         } catch (IOException e) {
@@ -102,7 +112,12 @@ public class JobSeekerImageServiceImpl implements JobSeekerImageService {
 
 
     @Override
-    public byte[] downloadImage(String fileName) throws IOException {
-        return new byte[0];
+    public String downloadImage(Integer jsId) throws IOException {
+            JobSeeker jobSeeker = this.jobSeekerRepository.findByJsId(jsId).orElseThrow(() -> new ResourceNotFoundException("JobSeeker", " Id ", jsId));
+
+            JobSeekerImage image = jobSeeker.getImage();
+
+            return image.getFilePath();
+
     }
 }

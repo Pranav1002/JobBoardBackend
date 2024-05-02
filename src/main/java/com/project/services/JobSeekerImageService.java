@@ -11,6 +11,6 @@ public interface JobSeekerImageService {
 
     public String changeImage(MultipartFile file, Integer userId) throws IOException;
 
-    public byte[] downloadImage(String fileName) throws IOException;
+    public String downloadImage(Integer jsId) throws IOException;
 
 }

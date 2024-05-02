@@ -11,8 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Base64;
 import java.util.Map;
 
 @Service
@@ -30,28 +35,29 @@ public class CompanyImageServiceImpl implements CompanyImageService {
     @Autowired
     private Cloudinary cloudinary;
 
-    private final String FOLDER_PATH="C:\\Users\\PRANAV THAKKAR\\OneDrive\\Desktop\\project files\\company images\\";
+    private final String FOLDER_PATH="";
 
     @Override
     public Map uploadImage(MultipartFile file, Integer userId) throws IOException {
 
-
-        CompanyImage image = companyImageRepository.save(CompanyImage.builder()
-                .fileName(file.getOriginalFilename())
-                .fileType(file.getContentType())
-                .filePath("").build());
-
-
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
-
-        Company company = this.companyRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
-
-        company.setImage(image);
-
-        companyRepository.save(company);
-
         try {
             Map data = this.cloudinary.uploader().upload(file.getBytes(), Map.of());
+
+            String cloudinaryUrl = (String) data.get("secure_url");
+
+            CompanyImage image = companyImageRepository.save(CompanyImage.builder()
+                    .fileName(file.getOriginalFilename())
+                    .fileType(file.getContentType())
+                    .filePath(cloudinaryUrl).build());
+
+
+            User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
+
+            Company company = this.companyRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException("User", " Id ", userId));
+
+            company.setImage(image);
+
+            companyRepository.save(company);
 
             return data;
         } catch (IOException e) {
@@ -101,7 +107,11 @@ public class CompanyImageServiceImpl implements CompanyImageService {
 
 
     @Override
-    public byte[] downloadImage(String fileName) throws IOException {
-        return new byte[0];
+    public String downloadImage(Integer companyId) throws IOException {
+        Company company = this.companyRepository.findById(companyId).orElseThrow(() -> new ResourceNotFoundException("Company", " Id ", companyId));
+
+        CompanyImage image = company.getImage();
+
+        return image.getFilePath();
     }
 }

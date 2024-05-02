@@ -25,11 +25,10 @@ public class ResumeController {
     }
 
     @GetMapping("jobseeker/resume/download/{jsId}")
-    public ResponseEntity<?> downloadResume(@PathVariable Integer jsId) throws IOException {
-        byte[] imageData=resumeService.downloadResume(jsId);
+    public ResponseEntity<String> downloadResume(@PathVariable Integer jsId) throws IOException {
+        String resume=resumeService.downloadResume(jsId);
         return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.valueOf("application/pdf"))
-                .body(imageData);
+                .body(resume);
 
     }
 

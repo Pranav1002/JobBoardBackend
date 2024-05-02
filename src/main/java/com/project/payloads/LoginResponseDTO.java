@@ -14,6 +14,10 @@ public class LoginResponseDTO {
 
     private User user;
 
+    private Integer jsId;
+
+    private Integer companyId;
+
     private String jwt;
 
 }

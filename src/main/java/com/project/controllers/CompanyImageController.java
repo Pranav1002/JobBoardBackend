@@ -28,12 +28,10 @@ public class CompanyImageController {
 
 
 
-    @GetMapping("/download/{fileName}")
-    public ResponseEntity<byte[]> downloadImage(@PathVariable String fileName) throws IOException {
-        byte[] imageData = companyImageService.downloadImage(fileName);
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(imageData);
+    @GetMapping("/download/{companyId}")
+    public ResponseEntity<String> downloadImage(@PathVariable Integer companyId) throws IOException {
+        String imageData = companyImageService.downloadImage(companyId);
+        return new ResponseEntity<>(imageData, HttpStatus.OK);
     }
 
     @PutMapping("/update/{userId}")
