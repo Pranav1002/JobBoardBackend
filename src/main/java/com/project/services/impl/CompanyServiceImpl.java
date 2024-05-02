@@ -1,14 +1,8 @@
 package com.project.services.impl;
 
-import com.project.Repositories.CompanyRepository;
-import com.project.Repositories.JobRepository;
-import com.project.Repositories.JobSeekerRepository;
-import com.project.Repositories.UserRepository;
+import com.project.Repositories.*;
 import com.project.exceptions.ResourceNotFoundException;
-import com.project.models.Company;
-import com.project.models.Job;
-import com.project.models.JobSeeker;
-import com.project.models.User;
+import com.project.models.*;
 import com.project.payloads.CompanyAddressDto;
 import com.project.payloads.CompanyDto;
 import com.project.payloads.JobDto;
@@ -36,6 +30,12 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
     private JobSeekerRepository jobSeekerRepository;
+
+    @Autowired
+    private JSEducationRepository jsEducationRepository;
+
+    @Autowired
+    private JSExperienceRepository jsExperienceRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -147,4 +147,23 @@ public class CompanyServiceImpl implements CompanyService {
         JobSeeker jobSeeker = jobSeekerRepository.findById(jsId).orElseThrow(() -> new ResourceNotFoundException("JobSeeker", " Id ", jsId));
         return modelMapper.map(jobSeeker, JobSeekerDto.class);
     }
+
+    @Override
+    public List<JSExperience> getExperienceById(Integer jsId) {
+        JobSeeker jobSeeker = jobSeekerRepository.findById(jsId).orElseThrow(() -> new ResourceNotFoundException("JobSeeker", "Id", jsId));
+
+        List<JSExperience> experiences = this.jsExperienceRepository.findByJobSeeker(jobSeeker).orElseThrow(() -> new ResourceNotFoundException("JobSeeker", "Id", jsId));
+
+        return experiences;
+    }
+
+    @Override
+    public List<JSEducation> getEducationById(Integer jsId) {
+        JobSeeker jobSeeker = jobSeekerRepository.findById(jsId).orElseThrow(() -> new ResourceNotFoundException("JobSeeker", " Id ", jsId));
+
+        List<JSEducation> educations = this.jsEducationRepository.findByJobSeeker(jobSeeker).orElseThrow(()->new ResourceNotFoundException("JobSeeker", " Id ", jsId));
+
+        return educations;
+    }
+
 }

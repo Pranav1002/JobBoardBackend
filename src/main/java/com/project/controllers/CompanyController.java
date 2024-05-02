@@ -1,5 +1,7 @@
 package com.project.controllers;
 
+import com.project.models.JSEducation;
+import com.project.models.JSExperience;
 import com.project.payloads.CompanyAddressDto;
 import com.project.payloads.CompanyDto;
 import com.project.payloads.JobDto;
@@ -75,6 +77,18 @@ public class CompanyController {
     @GetMapping("get/jobseeker/{jsId}")
     public ResponseEntity<JobSeekerDto> getJobSeekerById(@PathVariable Integer jsId){
         return ResponseEntity.ok(companyService.getJobSeekerById(jsId));
+    }
+
+    @GetMapping("get/jsEducation/{jsId}")
+    public ResponseEntity<List<JSEducation>> getJsEducationById(@PathVariable Integer jsId)
+    {
+        return ResponseEntity.ok(companyService.getEducationById(jsId));
+    }
+
+    @GetMapping("get/jsExperience/{jsId}")
+    public ResponseEntity<List<JSExperience>> getJsExperienceById(@PathVariable Integer jsId)
+    {
+        return ResponseEntity.ok(companyService.getExperienceById(jsId));
     }
 
 }

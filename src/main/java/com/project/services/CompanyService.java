@@ -1,5 +1,7 @@
 package com.project.services;
 
+import com.project.models.JSEducation;
+import com.project.models.JSExperience;
 import com.project.payloads.CompanyAddressDto;
 import com.project.payloads.CompanyDto;
 import com.project.payloads.JobDto;
@@ -28,5 +30,9 @@ public interface CompanyService {
     public List<JobSeekerDto> getAllJobSeekers();
 
     public JobSeekerDto getJobSeekerById(Integer jsId);
+
+    public List<JSExperience> getExperienceById(Integer jsId);
+
+    public List<JSEducation> getEducationById(Integer jsId);
 
 }
