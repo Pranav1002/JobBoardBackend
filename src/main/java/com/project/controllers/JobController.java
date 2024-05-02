@@ -69,7 +69,7 @@ public class JobController {
     }
 
 
-    @GetMapping("/get/jobs")
+    @GetMapping("/jobseeker/get/jobs")
     public ResponseEntity<List<JobDto>> getAllJobs()
     {
         List<JobDto> jobDtos =  this.jobService.getAllJobs();
