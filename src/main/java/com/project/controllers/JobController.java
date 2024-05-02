@@ -99,4 +99,16 @@ public class JobController {
         return ResponseEntity.ok(jobDtos);
     }
 
+    @GetMapping("jobseeker/job/{jobId}")
+    public ResponseEntity<JobDto> getJobByJobId(@PathVariable Integer jobId)
+    {
+        return ResponseEntity.ok(jobService.getJobByJobId(jobId));
+    }
+
+    @GetMapping("company/job/{jobId}")
+    public ResponseEntity<JobDto> getJobByJobIdForCompany(@PathVariable Integer jobId)
+    {
+        return ResponseEntity.ok(jobService.getJobByJobId(jobId));
+    }
+
 }

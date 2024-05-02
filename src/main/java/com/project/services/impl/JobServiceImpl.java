@@ -188,5 +188,11 @@ public class JobServiceImpl implements JobService {
         return jobDtos;
     }
 
+    @Override
+    public JobDto getJobByJobId(Integer jobId) {
+        Job job = jobRepository.findById(jobId).orElseThrow(() -> new ResourceNotFoundException("Job", " Id ", jobId));
+        return modelMapper.map(job, JobDto.class);
+    }
+
 
 }

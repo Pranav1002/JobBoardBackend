@@ -32,4 +32,6 @@ public interface JobService {
 
     public Set<JobDto> getShortListedJobs(Integer jsId);
 
+    public JobDto getJobByJobId(Integer jobId);
+
 }
