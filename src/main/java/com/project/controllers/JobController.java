@@ -47,7 +47,7 @@ public class JobController {
         return this.jobService.deleteJob(jobId,companyId);
     }
 
-    @GetMapping("company/get/applicants/{jobId}")
+    @GetMapping("company/get/job-applicants/{jobId}")
     public ResponseEntity<Set<JobSeekerDto>> getJobApplicants(@PathVariable Integer jobId)
     {
         Set<JobSeekerDto> jobSeekerDtos = this.jobService.getJobApplicants(jobId);
