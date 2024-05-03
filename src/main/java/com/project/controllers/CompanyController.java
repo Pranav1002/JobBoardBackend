@@ -2,10 +2,12 @@ package com.project.controllers;
 
 import com.project.models.JSEducation;
 import com.project.models.JSExperience;
+import com.project.models.User;
 import com.project.payloads.CompanyAddressDto;
 import com.project.payloads.CompanyDto;
 import com.project.payloads.JobDto;
 import com.project.payloads.JobSeekerDto;
+import com.project.services.AuthenticationService;
 import com.project.services.CompanyService;
 import com.project.services.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ public class CompanyController {
     @Autowired
     private CompanyService companyService;
 
+    @Autowired
+    private AuthenticationService authenticationService;
 
     @PostMapping("/add")
     public boolean addCompany(@RequestBody CompanyDto companyDto)
@@ -89,6 +93,11 @@ public class CompanyController {
     public ResponseEntity<List<JSExperience>> getJsExperienceById(@PathVariable Integer jsId)
     {
         return ResponseEntity.ok(companyService.getExperienceById(jsId));
+    }
+
+    @PutMapping("change-password/{userId}")
+    public ResponseEntity<Boolean> changePassword(@PathVariable Integer userId, @RequestParam String oldPassword, @RequestParam String newPassword, @RequestParam String confirmPassword){
+        return ResponseEntity.ok(authenticationService.changePassword(userId, oldPassword, newPassword, confirmPassword));
     }
 
 }

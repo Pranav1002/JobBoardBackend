@@ -112,6 +112,24 @@ public class AuthenticationService {
         }
     }
 
+    public Boolean changePassword(Integer userId, String oldPassword, String newPassword, String confirmPassword)
+    {
+        if(newPassword.equals(confirmPassword)){
+            User user = userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User", "Id", userId));
+
+            boolean isPasswordMatches = passwordEncoder.matches(oldPassword, user.getPassword());
+
+            if(isPasswordMatches)
+            {
+                String newEncodedPassword = passwordEncoder.encode(newPassword);
+                user.setPassword(newEncodedPassword);
+                userRepository.save(user);
+
+                return true;
+            }
+        }
+        return false;
+    }
 
 
 

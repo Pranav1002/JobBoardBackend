@@ -3,6 +3,7 @@ package com.project.controllers;
 import com.project.payloads.CompanyDto;
 import com.project.payloads.JobSeekerAddressDto;
 import com.project.payloads.JobSeekerDto;
+import com.project.services.AuthenticationService;
 import com.project.services.JobSeekerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,9 @@ public class JobSeekerController {
 
     @Autowired
     private JobSeekerService jobSeekerService;
+
+    @Autowired
+    private AuthenticationService authenticationService;
 
     @GetMapping("/{jsId}")
     public ResponseEntity<JobSeekerDto> getJobSeeker(@PathVariable Integer jsId)
@@ -80,6 +84,11 @@ public class JobSeekerController {
     public ResponseEntity<CompanyDto> getCompanyById(@PathVariable Integer companyId)
     {
         return ResponseEntity.ok(jobSeekerService.getCompanyById(companyId));
+    }
+
+    @PutMapping("change-password/{userId}")
+    public ResponseEntity<Boolean> changePassword(@PathVariable Integer userId, @RequestParam String oldPassword, @RequestParam String newPassword, @RequestParam String confirmPassword){
+        return ResponseEntity.ok(authenticationService.changePassword(userId, oldPassword, newPassword, confirmPassword));
     }
 
 }

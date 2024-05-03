@@ -59,6 +59,10 @@ public class User implements UserDetails {
         this.userId = userId;
     }
 
+    public void setPassword(String password){
+        this.password=password;
+    }
+
     @Override
     public String getPassword() {
         return this.password;
