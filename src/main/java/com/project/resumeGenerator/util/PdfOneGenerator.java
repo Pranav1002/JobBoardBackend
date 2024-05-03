@@ -38,7 +38,7 @@ public class PdfOneGenerator {
 		Document document = new Document();
 		try {
 			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-			String filename = resume.getHeader().getName() + ".pdf"; // Construct filename
+			String filename = resume.getHeader().getName(); // Construct filename
 			PdfWriter writer = PdfWriter.getInstance(document, byteArrayOutputStream);
 
 			document.open();
