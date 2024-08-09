@@ -30,14 +30,15 @@ The JobBoard project is built using the following technologies:
 
 To run the JobBoard project on your local machine, follow these steps:
 
-1. Clone the repository: git clone https://github.com/JobBoard.git
-2. Navigate to the project directory: cd JobBoard
-3. Install frontend dependencies: yarn install
-4. Install backend dependencies: Navigate to the backend directory and use Maven or Gradle to manage dependencies. For Maven, run mvn install.
-5. Set up the MySQL database: Create a MySQL database and configure the backend to connect to it. Update the database connection details in the backend’s application.properties file.
-6. Start the frontend development server: Run yarn start to launch the frontend application.
-7. Start the backend server: Navigate to the backend directory and use Maven to run the Spring Boot application. use command mvn spring-boot:run.
-8. Open your web browser and access the application: Visit the appropriate URL to view and interact with the application.
+1. Clone the repository: git clone https://github.com/JobBoardFrontend.git
+2. Clone the repository: git clone https://github.com/JobBoardBackend.git
+3. Navigate to the project directory: cd JobBoard
+4. Install frontend dependencies: yarn install
+5. Install backend dependencies: Navigate to the backend directory and use Maven or Gradle to manage dependencies. For Maven, run mvn install.
+6. Set up the MySQL database: Create a MySQL database and configure the backend to connect to it. Update the database connection details in the backend’s application.properties file.
+7. Start the frontend development server: Run yarn start to launch the frontend application.
+8. Start the backend server: Navigate to the backend directory and use Maven to run the Spring Boot application. use command mvn spring-boot:run.
+9. Open your web browser and access the application: Visit the appropriate URL to view and interact with the application.
 
 ## Contributor
 
